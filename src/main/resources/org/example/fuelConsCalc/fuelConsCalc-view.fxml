@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+
+
+<VBox fx:id="rootVBox"
+    xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="org.example.fuelConsCalc.FuelConsumptionController"
+    spacing="15"
+    alignment="TOP_CENTER"
+    stylesheets="@style.css">
+
+    <!-- Title -->
+    <Label fx:id="lblTitle"
+        text="Consumption calculator"
+        style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <!-- Language Selection Buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="English" onAction="#onENClick" style="-fx-font-weight: bold;" />
+        <Button text="Français" onAction="#onFRClick" />
+        <Button text="日本語" onAction="#onJPClick" />
+        <Button text="فارسی" onAction="#onFAClick" />
+    </HBox>
+
+    <Separator />
+
+    <!-- fuelConsumption Input Fields -->
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <Label fx:id="lblDistance" text="Distance (km):" GridPane.columnIndex="0"
+            GridPane.rowIndex="0" />
+        <TextField fx:id="txtDistance" promptText="Trip distance in kilometers" GridPane.columnIndex="1"
+            GridPane.rowIndex="0" prefWidth="200" />
+
+        <Label fx:id="lblFuel" text="Fuel Consumption (L/100 km):" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="txtFuel" promptText="Fuel consumption (L/100 km)" GridPane.columnIndex="1"
+            GridPane.rowIndex="1" prefWidth="200" />
+
+        <Label fx:id="lblPrice" text="Fuel Price (per liter):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="txtPrice" promptText="Fuel price per liter" GridPane.columnIndex="1"
+            GridPane.rowIndex="2" prefWidth="200" />
+
+        <Button fx:id="btnCalculate" text="Calculate" GridPane.columnIndex="0"
+            GridPane.rowIndex="3"
+            GridPane.columnSpan="3" onAction="#onCalculateClick" prefWidth="200" />
+    </GridPane>
+
+    <Separator />
+
+    <!-- Result Display -->
+    <Label fx:id="lblResult" text=""
+        style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <Separator />
+    <Label text="Made by Veijo Kasanen" />
+</VBox>
