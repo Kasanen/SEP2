@@ -41,6 +41,7 @@ public class FuelConsumptionController {
 
     private Locale currentLocale = Locale.of("en", "UK");
     private Map<String, String> localizedStrings;
+    private final FuelCalculatorService fuelCalculatorService = new FuelCalculatorService();
 
     /**
      * Initialize the controller - called automatically after FXML loading
@@ -103,6 +104,14 @@ public class FuelConsumptionController {
                     localizedStrings.getOrDefault("calc_result", "Total fuel needed: %.2f L | Total cost: %.2f"),
                     totalFuel, totalCost);
             lblResult.setText(result);
+
+            boolean success = fuelCalculatorService.saveCalculation(distance, fuel, price, totalFuel, totalCost,
+                    currentLocale.getLanguage());
+            if (success) {
+                System.out.println("Success!");
+            } else {
+                System.out.println("Fail!");
+            }
 
         } catch (NumberFormatException ex) {
             lblResult.setText(localizedStrings.getOrDefault("error_invalid_input", "Please enter valid numbers"));
