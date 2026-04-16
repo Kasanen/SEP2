@@ -67,14 +67,17 @@ RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.z
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
+RUN rm -rf /var/lib/apt/lists/* \
+ && apt-get clean \
+ && apt-get update -o Acquire::Retries=5 \
+ && apt-get install -y --no-install-recommends \
     libgtk-3-0 \
     libgbm1 \
     libx11-6 \
     libxrender1 \
     libxtst6 \
     libasound2 \
-    && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
 ENV DISPLAY=host.docker.internal:0.0
 
