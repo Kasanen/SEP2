@@ -36,6 +36,6 @@ RUN mvn clean package -DskipTests
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /app/target/avgspd1_pod.jar app.jar
+COPY --from=build /app/target/fuel_consumption.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
