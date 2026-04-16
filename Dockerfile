@@ -106,7 +106,7 @@ RUN apt-get clean \
  && apt-get update -o Acquire::Retries=5 \
  && apt-get install -y --no-install-recommends \
     wget unzip \
-    libgtk-3-0 libgbm1 libx11-6 libxrender1 libxtst6 libasound2 \
+    libgtk-3-0 libgbm1 libx11-6 libxrender1 libxtst6 libasound2t64 \
  && rm -rf /var/lib/apt/lists/*
 
 # Install JavaFX
