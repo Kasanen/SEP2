@@ -34,10 +34,10 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Download JavaFX SDK
-RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.zip -O /tmp/openjfx.zip && \
-    unzip /tmp/openjfx.zip -d /opt && \
-    rm /tmp/openjfx.zip
+# # Download JavaFX SDK
+# RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.zip -O /tmp/openjfx.zip && \
+#     unzip /tmp/openjfx.zip -d /opt && \
+#     rm /tmp/openjfx.zip
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:21-jre
