@@ -27,24 +27,24 @@
 # CMD ["java", "--module-path", "/opt/javafx-sdk-21/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "target/fuelConsumption.jar"]
 
 #### VER 2 ####
-# ---------- Build stage ----------
-FROM maven:3.9-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
+# # ---------- Build stage ----------
+# FROM maven:3.9-eclipse-temurin-21 AS build
+# WORKDIR /app
+# COPY pom.xml .
+# COPY src ./src
+# RUN mvn clean package -DskipTests
 
-# # Download JavaFX SDK
-# RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.zip -O /tmp/openjfx.zip && \
-#     unzip /tmp/openjfx.zip -d /opt && \
-#     rm /tmp/openjfx.zip
+# # # Download JavaFX SDK
+# # RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.zip -O /tmp/openjfx.zip && \
+# #     unzip /tmp/openjfx.zip -d /opt && \
+# #     rm /tmp/openjfx.zip
 
-# ---------- Runtime stage ----------
-FROM eclipse-temurin:21-jre
-WORKDIR /app
-COPY --from=build /app/target/fuel_consumption.jar app.jar
-EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# # ---------- Runtime stage ----------
+# FROM eclipse-temurin:21-jre
+# WORKDIR /app
+# COPY --from=build /app/target/fuel_consumption.jar app.jar
+# EXPOSE 8081
+# ENTRYPOINT ["java", "-jar", "app.jar"]
 
 
 #### VER 3 ####
@@ -85,3 +85,36 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 # COPY --from=build /opt/javafx-sdk-21 /opt/javafx-sdk-21
 
 # ENTRYPOINT ["java", "--module-path", "/opt/javafx-sdk-21/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
+
+#### VER 4 ####
+# ---------- Build stage ----------
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# ---------- Runtime stage ----------
+FROM eclipse-temurin:21-jdk
+
+ENV DISPLAY=host.docker.internal:0.0
+
+# Install required GUI libs (stable version)
+RUN apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4 \
+ && apt-get update -o Acquire::Retries=5 \
+ && apt-get install -y --no-install-recommends \
+    wget unzip \
+    libgtk-3-0 libgbm1 libx11-6 libxrender1 libxtst6 libasound2 \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install JavaFX
+RUN wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-sdk.zip -O /tmp/javafx.zip \
+ && unzip /tmp/javafx.zip -d /opt \
+ && rm /tmp/javafx.zip
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
+CMD ["java", "--module-path", "/opt/javafx-sdk-21/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
